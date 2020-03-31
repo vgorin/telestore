@@ -1,17 +1,15 @@
 package tech.openchat.telestore.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
+import tech.openchat.telestore.cmd.CommandProcessor;
 
 /**
  * @author vgorin
@@ -23,44 +21,31 @@ import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
 public class TelegramBot extends TelegramLongPollingBot {
     private final String username;
     private final String botToken;
+    private final CommandProcessor processor;
+    private final SentCallback<Message> callback;
 
     public TelegramBot(
             @Value("${telegram.bot.username}") String username,
-            @Value("${telegram.bot.api_token}") String botToken
+            @Value("${telegram.bot.api_token}") String botToken,
+            CommandProcessor processor,
+            SentCallback<Message> callback
     ) {
         this.username = username;
         this.botToken = botToken;
+        this.processor = processor;
+        this.callback = callback;
     }
-
 
     @Override
     public void onUpdateReceived(Update update) {
         log.trace("onUpdateReceived {}", update);
         if(update.hasMessage() && update.getMessage().hasText()) {
+            BotApiMethod<Message> method = processor.process(update);
             try {
-                executeAsync(new SendMessage()
-                                .setChatId(update.getMessage().getChatId())
-                                .setText(StringUtils.reverse(update.getMessage().getText())),
-                        new SentCallback<Message>() {
-                            @Override
-                            public void onResult(BotApiMethod<Message> method, Message response) {
-                                log.trace("onResult {} {}", method, response);
-                            }
-
-                            @Override
-                            public void onError(BotApiMethod<Message> method, TelegramApiRequestException apiException) {
-                                log.error("onError {} {}", method, apiException);
-                            }
-
-                            @Override
-                            public void onException(BotApiMethod<Message> method, Exception exception) {
-                                log.warn("onException", exception);
-                            }
-                        }
-                );
+                executeAsync(method, callback);
             }
             catch(TelegramApiException e) {
-                log.warn("executeAsync failed", e);
+                log.warn("executeAsync failed o execute method " + method, e);
             }
         }
     }
