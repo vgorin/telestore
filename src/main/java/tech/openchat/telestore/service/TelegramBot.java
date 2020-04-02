@@ -39,8 +39,8 @@ public class TelegramBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         log.trace("onUpdateReceived {}", update);
-        if(update.hasMessage() && update.getMessage().hasText()) {
-            BotApiMethod<Message> method = processor.process(update);
+        BotApiMethod<Message> method = processor.process(update);
+        if(method != null) {
             try {
                 executeAsync(method, callback);
             }

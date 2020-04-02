@@ -12,23 +12,22 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  */
 
 @Component
-public class HelpCommand implements Command {
-    static final String NAME = "help";
+class HelpCommand implements NamedCommand {
+    static final String DEFAULT_CMD_NAME = "help";
 
     @Override
-    public String getName() {
-        return NAME;
+    public String getDefaultCommandName() {
+        return DEFAULT_CMD_NAME;
     }
 
-    @Override
     public String getDescription() {
         return "Displays Help";
     }
 
     @Override
-    public BotApiMethod<Message> process(Update update) {
+    public BotApiMethod<Message> process(CommandPayload payload) {
         return new SendMessage()
-                .setChatId(update.getMessage().getChatId())
+                .setChatId(payload.getChatId())
                 .setText("// TODO: display help"); // TODO: display help
     }
 }

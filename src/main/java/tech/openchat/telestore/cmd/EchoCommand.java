@@ -15,23 +15,22 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Slf4j
 @Component
-public class EchoCommand implements Command {
-    static final String NAME = "echo";
+class EchoCommand implements NamedCommand {
+    static final String DEFAULT_CMD_NAME = "echo";
 
     @Override
-    public String getName() {
-        return NAME;
+    public String getDefaultCommandName() {
+        return DEFAULT_CMD_NAME;
     }
 
-    @Override
     public String getDescription() {
         return "Echoes back, reversing the letters";
     }
 
     @Override
-    public BotApiMethod<Message> process(Update update) {
+    public BotApiMethod<Message> process(CommandPayload payload) {
         return new SendMessage()
-                .setChatId(update.getMessage().getChatId())
-                .setText(StringUtils.reverse(update.getMessage().getText()));
+                .setChatId(payload.getChatId())
+                .setText(StringUtils.reverse(payload.getArguments().iterator().next()));
     }
 }
