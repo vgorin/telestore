@@ -2,10 +2,10 @@ package tech.openchat.telestore.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
-import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
+import org.telegram.telegrambots.meta.updateshandlers.ExtendedCallback;
 
 /**
  * @author vgorin
@@ -14,19 +14,19 @@ import org.telegram.telegrambots.meta.updateshandlers.SentCallback;
 
 @Slf4j
 @Component
-class LoggingCallback implements SentCallback<Message> {
+class LoggingCallback implements ExtendedCallback<Message> {
     @Override
-    public void onResult(BotApiMethod<Message> method, Message response) {
+    public void onResult(PartialBotApiMethod<Message> method, Message response) {
         log.trace("onResult {} {}", method, response);
     }
 
     @Override
-    public void onError(BotApiMethod<Message> method, TelegramApiRequestException apiException) {
+    public void onError(PartialBotApiMethod<Message> method, TelegramApiRequestException apiException) {
         log.error("onError " + method, apiException);
     }
 
     @Override
-    public void onException(BotApiMethod<Message> method, Exception exception) {
+    public void onException(PartialBotApiMethod<Message> method, Exception exception) {
         log.warn("onException " + method, exception);
     }
 }

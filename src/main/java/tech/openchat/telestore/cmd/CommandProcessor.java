@@ -2,7 +2,7 @@ package tech.openchat.telestore.cmd;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -27,7 +27,7 @@ public class CommandProcessor {
         }
     }
 
-    public BotApiMethod<Message> process(Update update) {
+    public PartialBotApiMethod<Message> process(Update update) {
         CommandPayload payload = extractPayload(update);
 
         if(payload == null) {

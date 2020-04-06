@@ -1,16 +1,23 @@
 package tech.openchat.telestore.cmd;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import tech.openchat.telestore.entity.Product;
 import tech.openchat.telestore.service.ProductService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.TreeMap;
+
+import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
 
 /**
  * @author vgorin
@@ -20,9 +27,11 @@ import java.util.Iterator;
 @Slf4j
 @Component
 public class DisplayProductCommand implements NamedCommand {
+    private final ResourceBundleMessageSource messageSource;
     private final ProductService productService;
 
-    public DisplayProductCommand(ProductService productService) {
+    public DisplayProductCommand(ResourceBundleMessageSource messageSource, ProductService productService) {
+        this.messageSource = messageSource;
         this.productService = productService;
     }
 
@@ -32,7 +41,7 @@ public class DisplayProductCommand implements NamedCommand {
     }
 
     @Override
-    public BotApiMethod<Message> process(CommandPayload payload) {
+    public PartialBotApiMethod<Message> process(CommandPayload payload) {
         Iterator<String> i = payload.getArguments().iterator();
 
         if(!i.hasNext()) {
@@ -42,15 +51,34 @@ public class DisplayProductCommand implements NamedCommand {
 
         try {
             Product product = productService.getProduct(Long.parseLong(i.next()));
+
+            ReplyKeyboard keyboard = verticalKeyboard(new TreeMap<String, String>() {{
+                put("/buy " + product.getId(), String.format(messageSource.getMessage("product.buttons.buy", null, Locale.ENGLISH), product.getPrice()));
+                put("/products", messageSource.getMessage("product.buttons.back_to_products", null, Locale.ENGLISH));
+                put("/start", messageSource.getMessage("product.buttons.back_to_home", null, Locale.ENGLISH));
+            }});
+
+            String text = String.format(
+                    messageSource.getMessage("product.text", null, Locale.ENGLISH),
+                    product.getTitle(),
+                    product.getDescription(),
+                    product.getPrice()
+            );
+
+            if(product.getPicture() != null && product.getPicture().getUrl() != null) {
+                return new SendPhoto()
+                        .setChatId(payload.getChatId())
+                        .setPhoto(product.getPicture().getUrl())
+                        .setParseMode(ParseMode.MARKDOWN)
+                        .setCaption(text)
+                        .setReplyMarkup(keyboard);
+            }
+
             return new SendMessage()
                     .setChatId(payload.getChatId())
                     .setParseMode(ParseMode.MARKDOWN)
-                    .setText(String.format(
-                            "*%s*\n\n%s\n\n*$%.2f*",
-                            product.getTitle(),
-                            product.getDescription(),
-                            product.getPrice()
-                    ));
+                    .setText(text)
+                    .setReplyMarkup(keyboard);
         }
         catch(NumberFormatException e) {
             log.debug("malformed product ID: integer expected", e);

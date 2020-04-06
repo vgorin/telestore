@@ -1,6 +1,8 @@
 package tech.openchat.telestore.cmd;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,15 +10,14 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import tech.openchat.telestore.entity.Product;
 import tech.openchat.telestore.service.ProductService;
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Locale;
+import java.util.stream.Collectors;
+
+import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
 
 /**
  * @author vgorin
@@ -26,9 +27,11 @@ import java.util.List;
 @Slf4j
 @Component
 class ListProductsCommand implements NamedCommand {
+    private final ResourceBundleMessageSource messageSource;
     private final ProductService productService;
 
-    public ListProductsCommand(ProductService productService) {
+    public ListProductsCommand(ResourceBundleMessageSource messageSource, ProductService productService) {
+        this.messageSource = messageSource;
         this.productService = productService;
     }
 
@@ -75,17 +78,12 @@ class ListProductsCommand implements NamedCommand {
 
         Page<Product> products = productService.listAllProducts(pageable);
 
-        List<List<InlineKeyboardButton>> keyboard = new LinkedList<>();
-        for(Product product: products) {
-            InlineKeyboardButton btn = new InlineKeyboardButton();
-            btn.setText(product.getTitle());
-            btn.setCallbackData("/product " + product.getId());
-            keyboard.add(Collections.singletonList(btn));
-        }
-
         return new SendMessage()
                 .setChatId(payload.getChatId())
-                .setReplyMarkup(new InlineKeyboardMarkup(keyboard))
-                .setText("Products:");
+                .setText(messageSource.getMessage("products.text", null, Locale.ENGLISH))
+                .setReplyMarkup(verticalKeyboard(products.stream().map(product -> new ImmutablePair<>(
+                        "/product " + product.getId(),
+                        product.getTitle()
+                )).collect(Collectors.toList())));
     }
 }

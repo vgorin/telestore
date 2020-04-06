@@ -15,8 +15,8 @@ import java.util.List;
 @Getter
 class CommandPayload {
     private final long chatId;
-    private final String commandName;
-    private final List<String> arguments = new LinkedList<>();
+    private final String commandName; // argument 0 – mandatory
+    private final List<String> arguments = new LinkedList<>(); // arguments 1+ – optional
 
     CommandPayload(long chatId, String commandName, String... arguments) {
         this.chatId = chatId;

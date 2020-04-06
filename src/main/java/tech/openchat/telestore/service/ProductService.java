@@ -7,7 +7,6 @@ import tech.openchat.telestore.entity.Product;
 import tech.openchat.telestore.repository.ProductRepository;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 
 /**
  * @author vgorin

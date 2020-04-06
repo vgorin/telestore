@@ -1,10 +1,12 @@
 package tech.openchat.telestore.cmd;
 
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
+
+import java.util.Locale;
 
 /**
  * @author vgorin
@@ -14,6 +16,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 class HelpCommand implements NamedCommand {
     static final String DEFAULT_CMD_NAME = "help";
+
+    private final ResourceBundleMessageSource messageSource;
+
+    HelpCommand(ResourceBundleMessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
 
     @Override
     public String getDefaultCommandName() {
@@ -28,6 +37,6 @@ class HelpCommand implements NamedCommand {
     public BotApiMethod<Message> process(CommandPayload payload) {
         return new SendMessage()
                 .setChatId(payload.getChatId())
-                .setText("// TODO: display help"); // TODO: display help
+                .setText(messageSource.getMessage("help.text", null, Locale.ENGLISH)); // TODO: display help
     }
 }
