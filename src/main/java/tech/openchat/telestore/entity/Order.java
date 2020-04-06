@@ -3,28 +3,28 @@ package tech.openchat.telestore.entity;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
+import java.util.Date;
 
 /**
  * @author vgorin
- * file created on 2020-03-29 15:04
+ * file created on 2020-04-04 23:41
  */
 
 @Data
 @Entity
-public class Product {
+public class Order {
     @Id
     @GeneratedValue
     private Long id;
 
-    @NotBlank
-    @Column(nullable = false)
-    private String title;
+    @ManyToOne(optional = false)
+    private Product product;
 
-    @Lob
-    @Column(length = 0x1000) // 4kb
-    private String description;
+    @NotNull
+    @Column(nullable = false)
+    private Date date;
 
     @Positive
     private Double qty;
@@ -32,7 +32,8 @@ public class Product {
     @Positive
     private Double price;
 
-    @ManyToOne
-    private Picture picture;
+    @OneToOne(optional = false)
+    private Wallet wallet;
+
 
 }
