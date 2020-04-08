@@ -11,13 +11,11 @@ import tech.openchat.telestore.entity.Order;
 import tech.openchat.telestore.entity.Product;
 import tech.openchat.telestore.service.OrderService;
 import tech.openchat.telestore.service.ProductService;
-import tech.openchat.telestore.service.WalletService;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.TreeMap;
 
 import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
 
@@ -32,18 +30,15 @@ public class BuyProductCommand implements NamedCommand {
     private final ResourceBundleMessageSource messageSource;
     private final ProductService productService;
     private final OrderService orderService;
-    private final WalletService walletService;
 
     public BuyProductCommand(
             ResourceBundleMessageSource messageSource,
             ProductService productService,
-            OrderService orderService,
-            WalletService walletService
+            OrderService orderService
     ) {
         this.messageSource = messageSource;
         this.productService = productService;
         this.orderService = orderService;
-        this.walletService = walletService;
     }
 
     @Override
@@ -63,11 +58,7 @@ public class BuyProductCommand implements NamedCommand {
         try {
             Product product = productService.getProduct(Long.parseLong(i.next()));
 
-            Order order = new Order();
-            order.setProduct(product);
-            order.setDate(new Date());
-            order.setPrice(product.getPrice());
-            order.setWallet(walletService.createNewWallet());
+            Order order = orderService.placeOrder(payload.getUserId(), payload.getChatId(), product);
 
             return new SendMessage()
                     .setChatId(payload.getChatId())
@@ -77,7 +68,7 @@ public class BuyProductCommand implements NamedCommand {
                             order.getPrice(),
                             order.getWallet().getAddressHex()
                     ))
-                    .setReplyMarkup(verticalKeyboard(new TreeMap<String, String>() {{
+                    .setReplyMarkup(verticalKeyboard(new LinkedHashMap<String, String>() {{
                         put("/orders", messageSource.getMessage("buy.buttons.my_orders", null, Locale.ENGLISH));
                         put("/products", messageSource.getMessage("buy.buttons.back_to_products", null, Locale.ENGLISH));
                         put("/start", messageSource.getMessage("buy.buttons.back_to_home", null, Locale.ENGLISH));

@@ -48,11 +48,14 @@ public class CommandProcessor {
 
     private static CommandPayload extractPayload(Update update) {
         if(update.hasMessage()
+                && update.getMessage().getFrom() != null
+                && update.getMessage().getFrom().getId() != null
                 && update.getMessage().getChatId() != null
                 && update.getMessage().hasText()) {
             String text = update.getMessage().getText();
             if(!text.startsWith("/")) {
                 return new CommandPayload(
+                        update.getMessage().getFrom().getId(),
                         update.getMessage().getChatId(),
                         EchoCommand.DEFAULT_CMD_NAME,
                         text
@@ -60,6 +63,7 @@ public class CommandProcessor {
             }
 
             return buildFrom(
+                    update.getMessage().getFrom().getId(),
                     update.getMessage().getChatId(),
                     text
             );
@@ -67,11 +71,14 @@ public class CommandProcessor {
 
         if(update.hasCallbackQuery()
                 && update.getCallbackQuery().getMessage() != null
+                && update.getCallbackQuery().getMessage().getFrom() != null
+                && update.getCallbackQuery().getMessage().getFrom().getId() != null
                 && update.getCallbackQuery().getMessage().getChatId() != null
                 && update.getCallbackQuery().getData() != null
                 && update.getCallbackQuery().getData().startsWith("/")) {
 
             return buildFrom(
+                    update.getCallbackQuery().getMessage().getFrom().getId(),
                     update.getCallbackQuery().getMessage().getChatId(),
                     update.getCallbackQuery().getData()
             );
@@ -80,12 +87,9 @@ public class CommandProcessor {
         return null;
     }
 
-    private static CommandPayload buildFrom(long chatId, String text) {
+    private static CommandPayload buildFrom(int userId, long chatId, String text) {
         StringTokenizer tokenizer = new StringTokenizer(text.substring(1));
-        CommandPayload payload = new CommandPayload(
-                chatId,
-                tokenizer.nextToken()
-        );
+        CommandPayload payload = new CommandPayload(userId, chatId, tokenizer.nextToken());
 
         while(tokenizer.hasMoreTokens()) {
             payload.addArgument(tokenizer.nextToken());

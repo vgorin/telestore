@@ -2,10 +2,7 @@ package tech.openchat.telestore.entity;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -30,7 +27,9 @@ public class Venue {
 
     private String description;
 
+    @OneToOne
     private Picture picture;
+
     @NotNull
     @Column(nullable = false)
     private Double locLat;

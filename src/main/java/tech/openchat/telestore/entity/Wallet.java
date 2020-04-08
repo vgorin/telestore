@@ -22,12 +22,16 @@ public class Wallet {
 
     @Enumerated(value = EnumType.STRING)
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = false, length = 7)
     private Currency currency;
 
     @NotNull
+    @Lob
     @Column(nullable = false)
     private BigInteger privateKey;
+
+    @Column
+    private Double balance;
 
     public BigInteger getPublicKey() {
         return ECKeyPair.create(privateKey).getPublicKey();

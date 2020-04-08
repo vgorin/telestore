@@ -6,6 +6,9 @@ spring:
     generate-ddl: true
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
   jackson:
     property-naming-strategy: SNAKE_CASE
     date-format: com.fasterxml.jackson.databind.util.ISO8601DateFormat

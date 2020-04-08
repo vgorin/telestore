@@ -14,11 +14,13 @@ import java.util.List;
 
 @Getter
 class CommandPayload {
+    private final int userId;
     private final long chatId;
     private final String commandName; // argument 0 – mandatory
     private final List<String> arguments = new LinkedList<>(); // arguments 1+ – optional
 
-    CommandPayload(long chatId, String commandName, String... arguments) {
+    CommandPayload(int userId, long chatId, String commandName, String... arguments) {
+        this.userId = userId;
         this.chatId = chatId;
         this.commandName = commandName;
         addArguments(Arrays.asList(arguments));

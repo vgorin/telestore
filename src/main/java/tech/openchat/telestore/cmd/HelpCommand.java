@@ -37,6 +37,6 @@ class HelpCommand implements NamedCommand {
     public BotApiMethod<Message> process(CommandPayload payload) {
         return new SendMessage()
                 .setChatId(payload.getChatId())
-                .setText(messageSource.getMessage("help.text", null, Locale.ENGLISH)); // TODO: display help
+                .setText(messageSource.getMessage("help.text", null, Locale.ENGLISH));
     }
 }
