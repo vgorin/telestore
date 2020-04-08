@@ -33,7 +33,6 @@ public class Order {
     @ManyToOne(optional = false)
     private Product product;
 
-    @NotNull
     @Column(nullable = false, updatable = false)
     @CreationTimestamp
     private Date created;
