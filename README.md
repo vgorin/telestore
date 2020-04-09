@@ -11,7 +11,7 @@ Telegram based E-commerce platform with Crypto support by OpenChat Systems
 Unix: ```./mvnw package -Dtelegram.bot.username=<required_value> -Dtelegram.bot.api_token=<required_value>```   
 Windows: ```mvnw package -Dtelegram.bot.username=<required_value> -Dtelegram.bot.api_token=<required_value>```
 * Running:
-```java -jar target/telestore-0.0.1-SNAPSHOT.jar -Dtelegram.bot.username=<required_value> -Dtelegram.bot.username=<required_value>```
+```java -Dtelegram.bot.username=<required_value> -Dtelegram.bot.api_token=<required_value> -jar target/telestore-0.0.1-SNAPSHOT.jar```
 * Troubleshooting:
   * Verify JRE version (1.8): ```java --version```
   * Ensure projects builds - locate ```target/telestore-0.0.1-SNAPSHOT.jar``` file and check it's accessible for reading
