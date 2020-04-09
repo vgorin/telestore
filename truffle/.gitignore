@@ -1,0 +1,6 @@
+syntax:glob
+
+node_modules/
+build/
+.infura_key
+.mnemonic*
