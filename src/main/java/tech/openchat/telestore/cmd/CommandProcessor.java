@@ -70,15 +70,15 @@ public class CommandProcessor {
         }
 
         if(update.hasCallbackQuery()
+                && update.getCallbackQuery().getFrom() != null
+                && update.getCallbackQuery().getFrom().getId() != null
                 && update.getCallbackQuery().getMessage() != null
-                && update.getCallbackQuery().getMessage().getFrom() != null
-                && update.getCallbackQuery().getMessage().getFrom().getId() != null
                 && update.getCallbackQuery().getMessage().getChatId() != null
                 && update.getCallbackQuery().getData() != null
                 && update.getCallbackQuery().getData().startsWith("/")) {
 
             return buildFrom(
-                    update.getCallbackQuery().getMessage().getFrom().getId(),
+                    update.getCallbackQuery().getFrom().getId(),
                     update.getCallbackQuery().getMessage().getChatId(),
                     update.getCallbackQuery().getData()
             );
