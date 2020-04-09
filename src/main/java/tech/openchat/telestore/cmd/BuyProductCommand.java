@@ -66,7 +66,7 @@ public class BuyProductCommand implements NamedCommand {
                     .setText(String.format(
                             messageSource.getMessage("buy.text", null, Locale.ENGLISH),
                             order.getPrice(),
-                            order.getWallet().getAddressHex()
+                            order.getWallet().getAddress()
                     ))
                     .setReplyMarkup(verticalKeyboard(new LinkedHashMap<String, String>() {{
                         put("/orders", messageSource.getMessage("buy.buttons.my_orders", null, Locale.ENGLISH));

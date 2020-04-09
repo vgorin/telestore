@@ -6,6 +6,7 @@ import org.web3j.crypto.Keys;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 /**
@@ -31,13 +32,17 @@ public class Wallet {
     private BigInteger privateKey;
 
     @Column
-    private Double balance;
+    private BigDecimal balance;
 
     public BigInteger getPublicKey() {
         return ECKeyPair.create(privateKey).getPublicKey();
     }
 
-    public String getAddressHex() {
-        return Keys.getAddress(ECKeyPair.create(privateKey));
+    public String getAddress() {
+        String address = Keys.getAddress(ECKeyPair.create(privateKey));
+        if(!address.startsWith("0x"))  {
+            address = "0x" + address;
+        }
+        return address;
     }
 }

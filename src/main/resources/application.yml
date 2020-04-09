@@ -20,3 +20,5 @@ logging:
     root: INFO
     tech.openchat: TRACE
 
+tether:
+  token_address: "0xdAC17F958D2ee523a2206206994597C13D831ec7"

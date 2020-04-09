@@ -1,0 +1,8 @@
+{
+	"properties": [
+		{
+			"name": "tether.token_address",
+			"type": "java.lang.String"
+		}
+	]
+}

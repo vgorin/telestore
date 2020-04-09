@@ -18,9 +18,12 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Page<Order> findAllByUserId(int userId, Pageable pageable);
     Page<Order> findAllByUserIdAndState(int userId, OrderState state, Pageable pageable);
 
-    Page<Order> findOrdersByUserId(int userId, Pageable pageable);
-    Page<Order> findOrdersByUserIdAndState(int userId, OrderState state, Pageable pageable);
-
     @Query("SELECT DISTINCT o.state FROM Order o WHERE o.userId = :userId")
     List<OrderState> findStates(int userId);
+
+    List<Order> findAllByState(OrderState state);
+
+    default List<Order> findAllUnpaid() {
+        return findAllByState(OrderState.UNPAID);
+    }
 }
