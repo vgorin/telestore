@@ -84,6 +84,19 @@ public class CommandProcessor {
             );
         }
 
+        if(update.hasMessage()
+                && update.getMessage().getFrom() != null
+                && update.getMessage().getFrom().getId() != null
+                && update.getMessage().getChatId() != null
+                && update.getMessage().hasPhoto()
+                && !update.getMessage().getPhoto().isEmpty()) {
+            return buildFrom(
+                    update.getMessage().getFrom().getId(),
+                    update.getMessage().getChatId(),
+                    "/photo " + update.getMessage().getPhoto().iterator().next().getFileId()
+            );
+        }
+
         return null;
     }
 
