@@ -1,5 +1,6 @@
 package tech.openchat.telestore.cmd;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
@@ -26,20 +27,11 @@ import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class BuyProductCommand implements NamedCommand {
     private final ResourceBundleMessageSource messageSource;
     private final ProductService productService;
     private final OrderService orderService;
-
-    public BuyProductCommand(
-            ResourceBundleMessageSource messageSource,
-            ProductService productService,
-            OrderService orderService
-    ) {
-        this.messageSource = messageSource;
-        this.productService = productService;
-        this.orderService = orderService;
-    }
 
     @Override
     public String getDefaultCommandName() {

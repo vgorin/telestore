@@ -1,5 +1,6 @@
 package tech.openchat.telestore.cmd;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.springframework.context.support.ResourceBundleMessageSource;
@@ -29,14 +30,10 @@ import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ListOrdersCommand implements NamedCommand {
     private final ResourceBundleMessageSource messageSource;
     private final OrderService orderService;
-
-    public ListOrdersCommand(ResourceBundleMessageSource messageSource, OrderService orderService) {
-        this.messageSource = messageSource;
-        this.orderService = orderService;
-    }
 
     @Override
     public String getDefaultCommandName() {

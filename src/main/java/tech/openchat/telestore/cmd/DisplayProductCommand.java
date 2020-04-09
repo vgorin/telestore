@@ -1,5 +1,6 @@
 package tech.openchat.telestore.cmd;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
@@ -14,8 +15,8 @@ import tech.openchat.telestore.service.ProductService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.TreeMap;
 
 import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
 
@@ -26,14 +27,10 @@ import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class DisplayProductCommand implements NamedCommand {
     private final ResourceBundleMessageSource messageSource;
     private final ProductService productService;
-
-    public DisplayProductCommand(ResourceBundleMessageSource messageSource, ProductService productService) {
-        this.messageSource = messageSource;
-        this.productService = productService;
-    }
 
     @Override
     public String getDefaultCommandName() {
@@ -52,18 +49,30 @@ public class DisplayProductCommand implements NamedCommand {
         try {
             Product product = productService.getProduct(Long.parseLong(i.next()));
 
-            ReplyKeyboard keyboard = verticalKeyboard(new TreeMap<String, String>() {{
-                put("/buy " + product.getId(), String.format(messageSource.getMessage("product.buttons.buy", null, Locale.ENGLISH), product.getPrice()));
-                put("/products", messageSource.getMessage("product.buttons.back_to_products", null, Locale.ENGLISH));
-                put("/start", messageSource.getMessage("product.buttons.back_to_home", null, Locale.ENGLISH));
-            }});
-
             String text = String.format(
                     messageSource.getMessage("product.text", null, Locale.ENGLISH),
                     product.getTitle(),
                     product.getDescription(),
                     product.getPrice()
             );
+
+            ReplyKeyboard keyboard;
+            if(i.hasNext() && "--order".equals(i.next()) && i.hasNext()) {
+                keyboard = verticalKeyboard(new LinkedHashMap<String, String>() {{
+                    put("/order " + i.next(), messageSource.getMessage("product.buttons.back_to_order", null, Locale.ENGLISH));
+                    put("/orders", messageSource.getMessage("product.buttons.my_orders", null, Locale.ENGLISH));
+                }});
+            }
+            else {
+                keyboard = verticalKeyboard(new LinkedHashMap<String, String>() {{
+                    put("/buy " + product.getId(), String.format(
+                            messageSource.getMessage("product.buttons.buy", null, Locale.ENGLISH),
+                            product.getPrice()
+                    ));
+                    put("/products", messageSource.getMessage("product.buttons.back_to_products", null, Locale.ENGLISH));
+                    put("/start", messageSource.getMessage("product.buttons.back_to_home", null, Locale.ENGLISH));
+                }});
+            }
 
             if(product.getPicture() != null && product.getPicture().getUrl() != null) {
                 return new SendPhoto()

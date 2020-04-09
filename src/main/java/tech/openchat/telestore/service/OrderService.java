@@ -1,5 +1,6 @@
 package tech.openchat.telestore.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import tech.openchat.telestore.entity.*;
 import tech.openchat.telestore.repository.OrderRepository;
 import tech.openchat.telestore.repository.WalletRepository;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
@@ -24,14 +26,10 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OrderService {
     private final OrderRepository orderRepository;
     private final WalletRepository walletRepository;
-
-    public OrderService(OrderRepository orderRepository, WalletRepository walletRepository) {
-        this.orderRepository = orderRepository;
-        this.walletRepository = walletRepository;
-    }
 
     @Transactional
     public Order placeOrder(int userId, long chatId, Product product) {
@@ -43,6 +41,14 @@ public class OrderService {
         order.setWallet(createNewWallet());
         order.setState(OrderState.UNPAID);
         return orderRepository.save(order);
+    }
+
+    public Order getOrder(long id) {
+        return orderRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+    }
+
+    public Order getOrder(int userId, long orderId) {
+        return orderRepository.findByUserIdAndId(userId, orderId).orElseThrow(EntityNotFoundException::new);
     }
 
     public Page<Order> listOrders(int userId, Pageable pageable) {

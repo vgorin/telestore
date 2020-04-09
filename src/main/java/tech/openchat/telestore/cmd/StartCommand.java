@@ -1,5 +1,6 @@
 package tech.openchat.telestore.cmd;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -18,12 +19,9 @@ import static tech.openchat.telestore.cmd.CommandUtils.verticalKeyboard;
  */
 
 @Component
+@RequiredArgsConstructor
 public class StartCommand implements NamedCommand {
     private final ResourceBundleMessageSource messageSource;
-
-    public StartCommand(ResourceBundleMessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
 
     @Override
     public String getDefaultCommandName() {

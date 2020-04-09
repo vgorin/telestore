@@ -1,5 +1,6 @@
 package tech.openchat.telestore.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -17,14 +18,10 @@ import java.math.BigDecimal;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class Web3Daemon {
     private final TetherService tetherService;
     private final OrderRepository orderRepository;
-
-    public Web3Daemon(TetherService tetherService, OrderRepository orderRepository) {
-        this.tetherService = tetherService;
-        this.orderRepository = orderRepository;
-    }
 
     @Scheduled(fixedRate = 14247)
     public void updateWalletBalances() {

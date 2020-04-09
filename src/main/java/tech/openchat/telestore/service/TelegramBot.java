@@ -18,8 +18,8 @@ import tech.openchat.telestore.cmd.CommandProcessor;
  * file created on 2020-03-30 15:41
  */
 
-@Service
 @Slf4j
+@Service
 public class TelegramBot extends TelegramLongPollingBot {
     private final String username;
     private final String botToken;
@@ -42,6 +42,12 @@ public class TelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         log.trace("onUpdateReceived {}", update);
         PartialBotApiMethod<Message> method = processor.process(update);
+
+        if(method == null) {
+            log.trace("method = null (unsupported update), skipping update");
+            return;
+        }
+
         try {
             executeAsync(method, callback);
         }

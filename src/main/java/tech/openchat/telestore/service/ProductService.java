@@ -1,5 +1,6 @@
 package tech.openchat.telestore.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,9 @@ import javax.persistence.EntityNotFoundException;
  */
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     public Product getProduct(long id) {
         return productRepository.findById(id).orElseThrow(EntityNotFoundException::new);

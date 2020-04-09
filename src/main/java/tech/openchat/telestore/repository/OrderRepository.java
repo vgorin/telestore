@@ -8,6 +8,7 @@ import tech.openchat.telestore.entity.Order;
 import tech.openchat.telestore.entity.OrderState;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author vgorin
@@ -15,6 +16,8 @@ import java.util.List;
  */
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
+    Optional<Order> findByUserIdAndId(int userId, long id);
+
     Page<Order> findAllByUserId(int userId, Pageable pageable);
     Page<Order> findAllByUserIdAndState(int userId, OrderState state, Pageable pageable);
 

@@ -1,5 +1,6 @@
 package tech.openchat.telestore.cmd;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -14,15 +15,11 @@ import java.util.Locale;
  */
 
 @Component
+@RequiredArgsConstructor
 class HelpCommand implements NamedCommand {
     static final String DEFAULT_CMD_NAME = "help";
 
     private final ResourceBundleMessageSource messageSource;
-
-    HelpCommand(ResourceBundleMessageSource messageSource) {
-        this.messageSource = messageSource;
-    }
-
 
     @Override
     public String getDefaultCommandName() {
