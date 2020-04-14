@@ -3,6 +3,14 @@
 		{
 			"name": "tether.token_address",
 			"type": "java.lang.String"
+		},
+		{
+			"name": "tor.host",
+			"type": "java.lang.String"
+		},
+		{
+			"name": "tor.port",
+			"type": "java.lang.Integer"
 		}
 	]
 }

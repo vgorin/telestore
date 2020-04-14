@@ -39,7 +39,7 @@ public class Wallet {
     }
 
     public String getAddress() {
-        String address = Keys.getAddress(ECKeyPair.create(privateKey));
+        String address = Keys.getAddress(getPublicKey());
         if(!address.startsWith("0x"))  {
             address = "0x" + address;
         }
