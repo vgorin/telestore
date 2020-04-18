@@ -33,7 +33,7 @@ public class StartCommand implements NamedCommand {
         return new SendMessage()
                 .setChatId(payload.getChatId())
                 .setParseMode(ParseMode.MARKDOWN)
-                .setText(messageSource.getMessage("start.text", null, Locale.ENGLISH))
+                .setText(messageSource.getMessage("start.texts.welcome_text", null, Locale.ENGLISH))
                 .setReplyMarkup(verticalKeyboard(new LinkedHashMap<String, String>() {{
                     put("/products", messageSource.getMessage("start.buttons.list_products", null, Locale.ENGLISH));
                     put("/orders", messageSource.getMessage("start.buttons.my_orders", null, Locale.ENGLISH));

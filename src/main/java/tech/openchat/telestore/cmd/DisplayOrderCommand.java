@@ -7,9 +7,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import tech.openchat.telestore.entity.Order;
 import tech.openchat.telestore.service.OrderService;
 
@@ -53,7 +51,7 @@ public class DisplayOrderCommand implements NamedCommand {
                     .setChatId(payload.getChatId())
                     .setParseMode(ParseMode.MARKDOWN)
                     .setText(String.format(
-                            messageSource.getMessage("order.text", null, Locale.ENGLISH),
+                            messageSource.getMessage("order.texts.order_desc", null, Locale.ENGLISH),
                             order.getProduct().getTitle(),
                             messageSource.getMessage("order.states." + order.getState(), null, Locale.ENGLISH),
                             order.getPrice(),

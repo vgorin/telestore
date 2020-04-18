@@ -56,7 +56,7 @@ public class BuyProductCommand implements NamedCommand {
                     .setChatId(payload.getChatId())
                     .setParseMode(ParseMode.MARKDOWN)
                     .setText(String.format(
-                            messageSource.getMessage("buy.text", null, Locale.ENGLISH),
+                            messageSource.getMessage("buy.texts.order_placed", null, Locale.ENGLISH),
                             order.getPrice(),
                             order.getWallet().getAddress()
                     ))

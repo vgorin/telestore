@@ -8,7 +8,6 @@ import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
-import tech.openchat.telestore.entity.UserSettings;
 import tech.openchat.telestore.service.UserSettingsService;
 
 import javax.persistence.EntityNotFoundException;
@@ -57,7 +56,7 @@ public class SetCommand implements NamedCommand {
                             userSettingsService.setServiceArea(payload.getUserId(), serviceAreaId);
                             return new SendMessage()
                                     .setChatId(payload.getChatId())
-                                    .setText(messageSource.getMessage("set.service_area.text.successfully_updated", null, Locale.ENGLISH))
+                                    .setText(messageSource.getMessage("set.texts.service_area_updated", null, Locale.ENGLISH))
                                     .setReplyMarkup(keyboard);
                         }
                         catch(EntityNotFoundException e) {
@@ -79,7 +78,7 @@ public class SetCommand implements NamedCommand {
 
         return new SendMessage()
                 .setChatId(payload.getChatId())
-                .setText(messageSource.getMessage("set.text", null, Locale.ENGLISH))
+                .setText(messageSource.getMessage("set.texts.usage", null, Locale.ENGLISH))
                 .setReplyMarkup(keyboard);
     }
 }

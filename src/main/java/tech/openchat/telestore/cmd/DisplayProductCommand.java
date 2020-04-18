@@ -50,7 +50,7 @@ public class DisplayProductCommand implements NamedCommand {
             Product product = productService.getProduct(Long.parseLong(i.next()));
 
             String text = String.format(
-                    messageSource.getMessage("product.text", null, Locale.ENGLISH),
+                    messageSource.getMessage("product.texts.product_desc", null, Locale.ENGLISH),
                     product.getTitle(),
                     product.getDescription(),
                     product.getPrice()

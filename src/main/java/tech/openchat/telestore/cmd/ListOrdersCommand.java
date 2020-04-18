@@ -56,7 +56,7 @@ public class ListOrdersCommand implements NamedCommand {
                 if(orders.isEmpty()) {
                     return new SendMessage()
                             .setChatId(payload.getChatId())
-                            .setText(messageSource.getMessage("orders.text.no_" + displayState, null, Locale.ENGLISH))
+                            .setText(messageSource.getMessage("orders.texts.no_" + displayState, null, Locale.ENGLISH))
                             .setReplyMarkup(singleBtnKeyboard(
                                     "/start",
                                     messageSource.getMessage("orders.buttons.back_to_home", null, Locale.ENGLISH)
@@ -65,7 +65,7 @@ public class ListOrdersCommand implements NamedCommand {
 
                 return new SendMessage()
                         .setChatId(payload.getChatId())
-                        .setText(messageSource.getMessage("orders.text." + displayState, null, Locale.ENGLISH))
+                        .setText(messageSource.getMessage("orders.texts." + displayState, null, Locale.ENGLISH))
                         .setReplyMarkup(verticalKeyboard(orders.stream().map(order -> new ImmutablePair<>(
                                 "/order " + order.getId(),
                                 order.getProduct().getTitle()
@@ -82,7 +82,7 @@ public class ListOrdersCommand implements NamedCommand {
         if(states.isEmpty()) {
             return new SendMessage()
                     .setChatId(payload.getChatId())
-                    .setText(messageSource.getMessage("orders.text.no_orders", null, Locale.ENGLISH))
+                    .setText(messageSource.getMessage("orders.texts.no_orders", null, Locale.ENGLISH))
                     .setReplyMarkup(singleBtnKeyboard(
                             "/start",
                             messageSource.getMessage("orders.buttons.back_to_home", null, Locale.ENGLISH)
@@ -96,7 +96,7 @@ public class ListOrdersCommand implements NamedCommand {
 
         return new SendMessage()
                 .setChatId(payload.getChatId())
-                .setText(messageSource.getMessage("orders.text", null, Locale.ENGLISH))
+                .setText(messageSource.getMessage("orders.texts.choose", null, Locale.ENGLISH))
                 .setReplyMarkup(verticalKeyboard(
                         Arrays.stream(OrderState.values())
                                 .filter(states::contains)

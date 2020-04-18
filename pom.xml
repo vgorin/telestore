@@ -10,7 +10,7 @@
     </parent>
     <groupId>tech.openchat</groupId>
     <artifactId>telestore</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>telestore</name>
     <description>Telegram based E-commerce platform wih Crypto support</description>
 
