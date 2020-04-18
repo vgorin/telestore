@@ -43,7 +43,7 @@ public class TorConfig {
         ProxySelector.setDefault(new ProxySelector() {
             @Override
             public List<Proxy> select(URI uri) {
-                log.trace("using tor for " + uri);
+                log.trace("using tor {} for {}", tor, uri);
                 return Collections.singletonList(tor);
             }
 

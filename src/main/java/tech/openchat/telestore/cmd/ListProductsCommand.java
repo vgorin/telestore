@@ -75,6 +75,10 @@ class ListProductsCommand implements NamedCommand {
 
         Page<Product> products = productService.listAllProducts(pageable);
 
+        if(products.isEmpty()) {
+            log.error("empty products list; did you forget to fill in products table with the data?");
+        }
+
         return new SendMessage()
                 .setChatId(payload.getChatId())
                 .setText(messageSource.getMessage("products.text", null, Locale.ENGLISH))

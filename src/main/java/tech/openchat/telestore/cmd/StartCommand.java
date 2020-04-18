@@ -37,6 +37,7 @@ public class StartCommand implements NamedCommand {
                 .setReplyMarkup(verticalKeyboard(new LinkedHashMap<String, String>() {{
                     put("/products", messageSource.getMessage("start.buttons.list_products", null, Locale.ENGLISH));
                     put("/orders", messageSource.getMessage("start.buttons.my_orders", null, Locale.ENGLISH));
+                    put("/settings", messageSource.getMessage("start.buttons.settings", null, Locale.ENGLISH));
                 }}));
     }
 

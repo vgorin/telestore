@@ -10,18 +10,18 @@ import javax.validation.constraints.NotBlank;
 
 /**
  * @author vgorin
- * file created on 2020-04-06 12:38
+ * file created on 2020-04-14 12:53
  */
 
 @Data
 @Entity
-public class Picture {
+public class ServiceArea {
     @Id
     @GeneratedValue
     private Long id;
 
     @NotBlank
     @Column(nullable = false)
-    private String url;
+    private String address;
 
 }

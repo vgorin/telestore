@@ -3,6 +3,7 @@ package tech.openchat.telestore.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,11 +18,11 @@ public class Venue {
     @GeneratedValue
     private Long id;
 
-    @NotNull
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
-    @NotNull
+    @NotBlank
     @Column(nullable = false)
     private String address;
 
@@ -37,4 +38,5 @@ public class Venue {
     @NotNull
     @Column(nullable = false)
     private Double locLon;
+
 }

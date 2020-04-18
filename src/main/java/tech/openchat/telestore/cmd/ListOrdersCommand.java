@@ -73,7 +73,7 @@ public class ListOrdersCommand implements NamedCommand {
 
             }
             catch(IllegalArgumentException e) {
-                log.debug("unrecognized argument " + subCommand);
+                log.debug("unrecognized argument {}", subCommand);
             }
         }
 
